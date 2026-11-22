@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Notch">
-<style>*,*::before,*::after{box-sizing:border-box}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);height:100%;background:#0B0B0C}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>*,*::before,*::after{box-sizing:border-box}html,body{height:100%;margin:0;overflow:hidden;background:#0B0B0C}#app{position:fixed!important;top:0;right:0;bottom:0;left:0;height:auto!important;padding-top:env(safe-area-inset-top,0px)}.foot{padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))!important}.foot.nav{padding-bottom:env(safe-area-inset-bottom,0px)!important}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap">
@@ -342,6 +342,8 @@ button.row:active{background:var(--surface)}
 .exrow.next{border-color:var(--accent);background:var(--raised)}.exrow.next .ix{background:var(--accent);color:var(--on-accent);box-shadow:none}.exrow.next .pips i.on{background:var(--accent)}.exrow.next>svg{stroke:var(--fg)}
 .exrow .upnext{font-size:11px!important;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)!important}
 .exrow.done{background:none;border-color:var(--hair)}.exrow.done .ix{color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}.exrow.done .nm b{color:var(--soft)}
+.ckey{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:12px;font-size:12px;color:var(--soft)}.ckey b{font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.04em;color:var(--fg);margin-right:5px}
+.cd i sup{font-size:9px;margin-left:1px;vertical-align:top}.wstrip i{font-size:13px;letter-spacing:.02em}
 .rmbtn{width:48px;height:56px;display:flex;align-items:center;justify-content:center;color:var(--soft);flex:none;border-radius:4px;transition:color .15s,transform .15s}.rmbtn:hover,.rmbtn:focus-visible{color:var(--fg)}.rmbtn:active{transform:scale(.88)}.rmbtn svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}.erow.gone{animation:rmOut .22s ease forwards}@keyframes rmOut{to{opacity:0;transform:translateX(40px)}}.toast .undo{margin-left:auto;font-weight:700;color:var(--accent);padding:4px 0 4px 12px;pointer-events:auto}
 .erow-more{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 0 12px 40px}
 .erow-more .step{flex:1;height:52px;background:var(--surface)}
@@ -454,6 +456,7 @@ var LIB={
   shoulderarms:function(){return[mkSlot('Shoulder press'),mkSlot('Lateral raise'),mkSlot('Biceps curl'),mkSlot('Triceps pushdown','Rope'),mkSlot('Hammer curl'),mkSlot('Overhead triceps extension')]}
 };
 var TPL={
+  pplu:{name:'Push · Pull · Legs · Upper',days:4,s:[['Push','push'],['Pull','pull'],['Legs','leg'],['Upper','upper'],['Cardio & abs','cardio',1]]},
   pplf:{name:'Push · Pull · Legs · Full body',days:4,s:[['Push','push'],['Pull','pull'],['Legs','leg'],['Full body','full'],['Cardio & abs','cardio',1]]},
   ppl:{name:'Push · Pull · Legs',days:3,s:[['Push','push'],['Pull','pull'],['Legs','leg'],['Cardio & abs','cardio',1]]},
   ul:{name:'Upper · Lower',days:4,s:[['Upper','upper'],['Lower','lower'],['Cardio & abs','cardio',1]]},
@@ -464,10 +467,10 @@ var TPL={
   clf:{name:'Chest · Lat · Legs',days:3,s:[['Chest','chest'],['Lat','lat'],['Legs','leg']]},
   blank:{name:'My program',days:3,s:[]}
 };
-var TPLS=[['pplf','Push · Pull · Legs · Full body','4 days a week: the three PPL days plus a full-body day.'],['ppl','Push · Pull · Legs','3 days a week, or 6 if you run it twice. Chest, shoulders and triceps; back and biceps; legs.'],['ul','Upper · Lower','4 days a week: upper body and lower body, twice each.'],['fb','Full body','3 days a week, alternating two full-body sessions, A and B.'],['bro','Body-part split','5 days a week, one muscle group a day. Often called the bro split.'],['arnold','Arnold split','6 days a week: chest and back, shoulders and arms, legs, then repeat.'],['pplul','Push · Pull · Legs · Upper · Lower','5 days a week: a PPL block, then an upper and a lower day.'],['blank','Build my own','Start empty and add your own sessions.']];
+var TPLS=[['pplu','Push · Pull · Legs · Upper','4 days a week: the three PPL days plus an extra upper-body day.'],['pplf','Push · Pull · Legs · Full body','4 days a week: the three PPL days plus a full-body day.'],['ppl','Push · Pull · Legs','3 days a week, or 6 if you run it twice. Chest, shoulders and triceps; back and biceps; legs.'],['ul','Upper · Lower','4 days a week: upper body and lower body, twice each.'],['fb','Full body','3 days a week, alternating two full-body sessions, A and B.'],['bro','Body-part split','5 days a week, one muscle group a day. Often called the bro split.'],['arnold','Arnold split','6 days a week: chest and back, shoulders and arms, legs, then repeat.'],['pplul','Push · Pull · Legs · Upper · Lower','5 days a week: a PPL block, then an upper and a lower day.'],['blank','Build my own','Start empty and add your own sessions.']];
 function makeProgram(t){var d=TPL[t];return{id:uid(),name:d.name,days:d.days,sessions:d.s.map(function(x){return{id:uid(),name:x[0],extra:!!x[2],slots:LIB[x[1]]()}})}}
 function defLimits(){return{streak:{on:true,v:6},long:{on:true,v:90},jump:{on:true,v:10},drop:{on:true,v:3},soon:{on:true,v:48}}}
-function fresh(){var p=makeProgram('pplf');return{v:1,unit:'kg',step:2.5,rest:90,programs:[p],activeProgram:p.id,workouts:[],active:null,sample:false,onboarded:false,limits:defLimits(),haptics:true,restAck:0,custom:[],noEq:[],profile:{name:''}}}
+function fresh(){var p=makeProgram('pplu');return{v:1,unit:'kg',step:2.5,rest:90,programs:[p],activeProgram:p.id,workouts:[],active:null,sample:false,onboarded:false,limits:defLimits(),haptics:true,restAck:0,custom:[],noEq:[],profile:{name:''}}}
 function migrate(o){if(o.onboarded==null)o.onboarded=o.workouts.length>0||!!o.sample;var dl=defLimits();o.limits=o.limits||{};for(var k in dl)if(!o.limits[k])o.limits[k]=dl[k];if(o.haptics==null)o.haptics=true;if(!o.custom)o.custom=[];if(!o.noEq)o.noEq=[];if(!o.profile)o.profile={name:''};o.programs.forEach(function(p){var m={'PPLF · 4 days':['Push · Pull · Legs · Full body',4],'PPL':['Push · Pull · Legs',3],'Chest · Lat · Leg':['Chest · Lat · Legs',3]}[p.name];if(m&&!p.days){p.name=m[0];p.days=m[1]}if(!p.days)p.days=Math.max(1,p.sessions.filter(function(s){return!s.extra}).length);p.sessions.forEach(function(s){if(s.name==='Leg')s.name='Legs'})});o.workouts.forEach(function(w){if(w.sessionName==='Leg')w.sessionName='Legs'});o.programs.forEach(function(p){p.sessions.forEach(function(s){s.slots.forEach(function(sl){if(/^chest press$/i.test(sl.name)&&!sl.options.some(function(x){return(x.eq||inferEq(x.name))==='barbell'}))sl.options.push({id:uid(),name:'Barbell',eq:'barbell'});if(!sl.variants)sl.variants=[];if(sl.variant==null)sl.variant=''})})});return o}
 function load(){try{var t=localStorage.getItem(KEY);if(t){var o=JSON.parse(t);if(o&&o.v===1&&o.programs&&o.programs.length)return migrate(o)}}catch(e){storageOK=false}return null}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){storageOK=false}}
@@ -537,6 +540,8 @@ function currentRamp(){var ws=S.workouts;if(!ws.length)return null;var last=ws[w
   return null}
 function pct(x){return Math.round(x*100)+'%'}
 function roundStep(w){return Math.max(0,Math.round(w/S.step)*S.step)}
+var SCODE={'push':'PSH','pull':'PUL','legs':'LEG','leg':'LEG','upper':'UPR','lower':'LWR','full body':'FB','full body a':'FBA','full body b':'FBB','chest':'CH','back':'BK','shoulders':'SH','arms':'ARM','cardio & abs':'C+A','chest & back':'C+B','shoulders & arms':'S+A','quick workout':'QW','lat':'LAT'};
+function sCode(n){n=String(n||'?').trim();var k=n.toLowerCase();if(SCODE[k])return SCODE[k];var w=k.split(/[^a-z0-9]+/).filter(Boolean);if(w.length>1)return w.slice(0,3).map(function(x){return x.charAt(0)}).join('').toUpperCase();return n.slice(0,3).toUpperCase()}
 function cap(t){return t.charAt(0).toUpperCase()+t.slice(1)}
 function hidKey(name,o){return(name+'|'+(o&&o.name||'')).toLowerCase()}
 function isHid(sl,o){return(S.noEq||[]).indexOf(hidKey(sl.name,o))>=0}
@@ -667,7 +672,7 @@ function soonAlert(s){if(S.active||!s)return'';var L=S.limits.soon,w=lastWk(s.id
   return''}
 function avatarIn(){var nm=(S.profile&&S.profile.name||'').trim();return'<span class="avatar">'+(nm?esc(nm.charAt(0).toUpperCase()):I.user)+'</span>'}
 function weekStrip(){var m=weekStart(Date.now()),out='',L='MTWTFSS';for(var i=0;i<7;i++){var d=new Date(m);d.setDate(d.getDate()+i);var t=+d,ws=S.workouts.filter(function(w){return sod(w.end)===t}),today=t===sod(Date.now());
-    out+='<div><span>'+L[i]+'</span><i style="--i:'+i+'" class="'+(ws.length?'on':'')+(today?' today':'')+'" title="'+esc(ws.map(function(w){return w.sessionName}).join(', '))+'">'+(ws.length?esc(ws[0].sessionName.charAt(0)):'')+'</i></div>'}
+    out+='<div><span>'+L[i]+'</span><i style="--i:'+i+'" class="'+(ws.length?'on':'')+(today?' today':'')+'" title="'+esc(ws.map(function(w){return w.sessionName}).join(', '))+'">'+(ws.length?esc(sCode(ws[0].sessionName)):'')+'</i></div>'}
   return'<div class="wstrip" role="img" aria-label="This week: '+weekCount()+' workouts">'+out+'</div>'}
 function monthStart(){var d=new Date();d.setDate(1);d.setHours(0,0,0,0);return +d}
 function monthHl(){if(!S.workouts.length)return'';var ms=monthStart(),n=0,b=0;S.workouts.forEach(function(w,i){if(w.end>=ms){n++;b+=bestsIn(i)}});
@@ -930,10 +935,11 @@ function calHtml(){var b=new Date();b.setHours(0,0,0,0);b.setDate(1);b.setMonth(
   S.workouts.forEach(function(w){var k=sod(w.end);(map[k]=map[k]||[]).push(w)});
   for(var i=0;i<lead;i++)cells+='<span aria-hidden="true"></span>';
   for(var d=1;d<=days;d++){var t=+new Date(y,m,d),ws=map[t],cls='cd'+(t===today?' today':'');
-    if(ws){cnt+=ws.length;var rp=ws.every(function(w){return w.ramp});cells+='<button class="'+cls+(rp?' ramp':' on')+(V.day===t?' sel':'')+'" data-a="calDay" data-t="'+t+'" aria-label="'+esc(dateStr(t)+': '+ws.map(function(w){return w.sessionName}).join(', '))+'" aria-pressed="'+(V.day===t)+'"><b>'+d+'</b><i>'+esc(ws.map(function(w){return(w.sessionName||'?').charAt(0).toUpperCase()}).join(''))+'</i></button>'}
+    if(ws){cnt+=ws.length;var rp=ws.every(function(w){return w.ramp});cells+='<button class="'+cls+(rp?' ramp':' on')+(V.day===t?' sel':'')+'" data-a="calDay" data-t="'+t+'" aria-label="'+esc(dateStr(t)+': '+ws.map(function(w){return w.sessionName}).join(', '))+'" aria-pressed="'+(V.day===t)+'"><b>'+d+'</b><i>'+esc(sCode(ws[0].sessionName))+(ws.length>1?'<sup>+'+(ws.length-1)+'</sup>':'')+'</i></button>'}
     else cells+='<span class="'+cls+'"><b>'+d+'</b></span>'}
   return'<section class="cal mt16" id="cal" aria-label="Workout calendar"><div class="cal-h"><button class="icon" data-a="calMo" data-d="-1" aria-label="Previous month">'+I.back+'</button><div><b class="disp" style="font-size:26px;line-height:1">'+MON[m]+(y!==new Date().getFullYear()?' '+y:'')+'</b><span class="quiet sm">'+cnt+' workout'+(cnt===1?'':'s')+'</span></div><button class="icon" data-a="calMo" data-d="1" aria-label="Next month"'+((V.mo||0)>=0?' disabled':'')+'>'+I.back.replace('<svg','<svg style="transform:scaleX(-1)"')+'</button></div>'+
     '<div class="cal-g wk" aria-hidden="true"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div><div class="cal-g'+(V.calDir?(V.calDir>0?' sl':' sr'):'')+'">'+cells+'</div>'+
+    (function(){var seen={},out=[];S.workouts.forEach(function(w){var d=new Date(w.end);if(d.getFullYear()===y&&d.getMonth()===m){var c=sCode(w.sessionName);if(!seen[c]){seen[c]=1;out.push('<span><b>'+esc(c)+'</b>'+esc(w.sessionName)+'</span>')}}});return out.length?'<div class="ckey">'+out.join('')+'</div>':''})()+
     '<div class="legend"><span><i style="background:var(--accent)"></i>Trained</span><span><i style="box-shadow:inset 0 0 0 1.5px var(--accent)"></i>Easing back</span><span><i style="box-shadow:inset 0 0 0 1.5px var(--fg)"></i>Today</span></div></section>'}
 function bindCal(){var c=$('cal');if(!c)return;var x0=null;c.addEventListener('pointerdown',function(e){x0=e.clientX});c.addEventListener('pointerup',function(e){if(x0==null)return;var dx=e.clientX-x0;x0=null;if(Math.abs(dx)>50){if(dx<0&&(V.mo||0)>=0)return;ACT.calMo({d:dx<0?1:-1})}})}
 VIEW.editSession=function(){var s=findSession(V.id);if(!s)return VIEW.today();
@@ -975,7 +981,7 @@ VIEW.welcome=function(){var h=obTop(0)+'<div class="lbl acc mt32">Welcome to Not
   h+='<div class="gap16 mt32">'+[['01','Your program, in order','Set up Push, Pull, Legs or your own split. Notch lines up the next session for you.'],['02','Last time and your best, on every set','See what you lifted last time before you start, even after switching machines.'],['03','A gentle restart after a break','After two weeks or more off, Notch starts you lighter and builds you back up.']].map(function(r,i){return'<div class="feat" style="--i:'+i+'"><span class="num">'+r[0]+'</span><div><b>'+r[1]+'</b><p>'+r[2]+'</p></div></div>'}).join('')+'</div>';
   return{body:h,foot:'<div class="foot"><button class="main" data-a="obGo" data-v="onbProgram">Get started'+I.arrow+'</button><p class="quiet center sm" style="padding:6px 0">No account needed. Your workouts stay on this device.</p></div>'}};
 var CSN=['Push','Pull','Legs','Upper','Lower','Full body','Chest','Back','Shoulders','Arms','Cardio & abs'],CSL={'push':'push','pull':'pull','legs':'leg','leg':'leg','upper':'upper','lower':'lower','full body':'full','chest':'chest','back':'back','shoulders':'shoulders','arms':'arms','cardio & abs':'cardio'};
-VIEW.onbProgram=function(){var mode=V.obMode||'ready',sel=V.tpl||'pplf',cs=V.cs||[],h=obTop(1,'welcome')+'<h1 class="disp mt24" style="font-size:52px">Pick your split</h1><p class="soft mt8">A split is how you divide your training across the week.</p>';
+VIEW.onbProgram=function(){var mode=V.obMode||'ready',sel=V.tpl||'pplu',cs=V.cs||[],h=obTop(1,'welcome')+'<h1 class="disp mt24" style="font-size:52px">Pick your split</h1><p class="soft mt8">A split is how you divide your training across the week.</p>';
   h+='<div class="modes mt16" role="tablist"><button role="tab" aria-selected="'+(mode==='ready')+'" class="'+(mode==='ready'?'on':'')+'" data-a="obMode" data-m="ready">'+I.stack+'<b>Ready-made</b><small>Popular splits with starter exercises</small></button><button role="tab" aria-selected="'+(mode==='custom')+'" class="'+(mode==='custom'?'on':'')+'" data-a="obMode" data-m="custom">'+I.pencil+'<b>Build my own</b><small>Name your sessions, add exercises later</small></button><span class="bar" style="transform:translateX('+(mode==='custom'?'calc(100% + 8px)':'0')+')"></span></div>';
   if(mode==='ready'){h+='<div class="gap8 mt16">'+TPLS.filter(function(t){return t[0]!=='blank'}).map(function(t,k){var on=t[0]===sel;
     return'<button class="opt'+(on?' on':'')+'" style="animation:rowIn .3s ease-out both;animation-delay:'+k*35+'ms" data-a="obTpl" data-t="'+t[0]+'" aria-pressed="'+on+'"><span><b>'+t[1]+'</b><span class="s">'+t[2]+'</span></span>'+(on?'<span class="tick">'+I.checkS+'</span>':'')+'</button>'}).join('')+'</div><p class="quiet sm mt12">You can switch programs or change any session later.</p>'}
@@ -1065,7 +1071,7 @@ var ACT={
   csRm:function(d){V.cs=(V.cs||[]).filter(function(x,k){return k!==+d.k});render()},
   csDays:function(d){var c=V.cd||Math.max(1,Math.min(7,(V.cs||[]).length||3));V.cd=Math.max(1,Math.min(7,c+ +d.d));render()},
   obTpl:function(d){V.tpl=d.t;buzz(6);render()},
-  obFinish:function(d){if(V.tour||S.onboarded){S.onboarded=true;save();go('today');return}var cust=V.obMode==='custom',p=cust?customProgram(V.cs||[],V.cd):makeProgram(V.tpl||'pplf');S.programs=[p];S.activeProgram=p.id;S.onboarded=true;if(d.sample)loadSample(0);save();if(cust&&!p.sessions.length)go('editProgram',{id:p.id});else go('today')},
+  obFinish:function(d){if(V.tour||S.onboarded){S.onboarded=true;save();go('today');return}var cust=V.obMode==='custom',p=cust?customProgram(V.cs||[],V.cd):makeProgram(V.tpl||'pplu');S.programs=[p];S.activeProgram=p.id;S.onboarded=true;if(d.sample)loadSample(0);save();if(cust&&!p.sessions.length)go('editProgram',{id:p.id});else go('today')},
   replayIntro:function(){go('splash',{tour:true})},
   eqPick:function(){V.eqPick=!V.eqPick;render()},
   setEq:function(d){var a=S.active,e=a.entries[a.idx],o=optRec(e);if(o)o.eq=d.eq;e.eq=d.eq;var x=draft();x.plates=null;if(d.eq==='body')x.w=0;V.eqPick=false;save();render()},
