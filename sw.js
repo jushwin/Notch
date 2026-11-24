@@ -1,6 +1,6 @@
 // Notch offline support: keeps the app shell on the phone so it opens in the gym without signal.
 // Bump VERSION whenever index.html changes so phones pick up the new version.
-var VERSION = 'notch-v12';
+var VERSION = 'notch-v13';
 var SHELL = ['/', '/index.html', '/manifest.webmanifest', '/icons/icon-192.png', '/icons/icon-512.png', '/icons/apple-touch-icon.png'];
 
 self.addEventListener('install', function (e) {
